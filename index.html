@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医体质辨识自测</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f8f4e9 0%, #e8f5e9 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #4CAF50 0%, #81C784 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .intro h2 {
+            color: #2E7D32;
+            margin-bottom: 15px;
+        }
+        
+        .intro p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .btn-start {
+            display: block;
+            width: 80%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-start:hover {
+            background: #388E3C;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .quiz-container {
+            display: none;
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 12px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #81C784 0%, #4CAF50 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #2E7D32;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .option:hover {
+            background: #e8f5e9;
+            border-color: #81C784;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .option span {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            background: #81C784;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .btn-nav {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-prev {
+            background: #f5f5f5;
+            color: #555;
+        }
+        
+        .btn-prev:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-next {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: #388E3C;
+        }
+        
+        .btn-submit {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: #F57C00;
+        }
+        
+        .result-container {
+            display: none;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .result-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .constitution-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin: 25px 0;
+            text-align: left;
+            border-top: 5px solid #4CAF50;
+        }
+        
+        .constitution-name {
+            font-size: 1.8rem;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .constitution-name i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        .constitution-desc {
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .constitution-tips h3 {
+            color: #FF9800;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FFE0B2;
+            padding-bottom: 8px;
+        }
+        
+        .constitution-tips ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .constitution-tips li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .constitution-tips li:before {
+            content: "•";
+            color: #4CAF50;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+        
+        .btn-restart {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-restart:hover {
+            background: #388E3C;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .constitution-name {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1>中医体质辨识自测</h1>
+            <p>回答简单问题，了解您的体质类型，获取个性化养生建议</p>
+        </header>
+        
+        <div class="content">
+            <div class="intro" id="intro">
+                <h2><i class="fas fa-info-circle"></i> 体质辨识说明</h2>
+                <p>中医体质学将人体体质分为九种基本类型，不同体质在形态结构、生理功能、心理状态等方面各有特点。</p>
+                <p>本测试基于《中医体质分类与判定》标准，通过回答10个简单问题，帮助您初步了解自身体质类型。</p>
+                <p>测试结果仅供参考，具体体质判定请咨询专业中医师。</p>
+                <button class="btn-start" id="startBtn">开始体质测试</button>
+            </div>
+            
+            <div class="quiz-container" id="quizContainer">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="question-card">
+                    <div class="question-text" id="questionText"></div>
+                    <div class="options" id="optionsContainer"></div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn-nav btn-prev" id="prevBtn"><i class="fas fa-arrow-left"></i> 上一题</button>
+                    <button class="btn-nav btn-next" id="nextBtn">下一题 <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="result-container" id="resultContainer">
+                <h2 class="result-title"><i class="fas fa-clipboard-check"></i> 您的体质测试结果</h2>
+                <div class="constitution-card">
+                    <div class="constitution-name" id="constitutionName">
+                        <i class="fas fa-seedling"></i>
+                        <span id="constitutionType">平和质</span>
+                    </div>
+                    <div class="constitution-desc" id="constitutionDesc">
+                        平和质是正常的健康体质。这类人体形匀称健壮，面色红润，精力充沛，睡眠良好，二便正常。
+                    </div>
+                    <div class="constitution-tips">
+                        <h3><i class="fas fa-lightbulb"></i> 养生建议：</h3>
+                        <ul id="constitutionTips">
+                            <li>保持规律作息，避免过度劳累</li>
+                            <li>饮食均衡，避免偏食</li>
+                            <li>适度运动，保持心情愉悦</li>
+                            <li>定期体检，关注身体变化</li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="btn-restart" id="restartBtn"><i class="fas fa-redo"></i> 重新测试</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>本测试仅供参考，不作为医疗诊断依据 | 中医体质辨识H5应用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 体质测试问题
+        const questions = [
+            {
+                text: "您容易感到疲乏或精力不足吗？",
+                options: [
+                    { text: "几乎没有", score: { 气虚质: 1 } },
+                    { text: "偶尔有", score: { 气虚质: 2 } },
+                    { text: "有时有", score: { 气虚质: 3 } },
+                    { text: "经常有", score: { 气虚质: 4 } },
+                    { text: "总是有", score: { 气虚质: 5 } }
+                ]
+            },
+            {
+                text: "您怕冷，手脚容易发凉吗？",
+                options: [
+                    { text: "几乎没有", score: { 阳虚质: 1 } },
+                    { text: "偶尔有", score: { 阳虚质: 2 } },
+                    { text: "有时有", score: { 阳虚质: 3 } },
+                    { text: "经常有", score: { 阳虚质: 4 } },
+                    { text: "总是有", score: { 阳虚质: 5 } }
+                ]
+            },
+            {
+                text: "您感到身体、脸上发热或手心发热吗？",
+                options: [
+                    { text: "几乎没有", score: { 阴虚质: 1 } },
+                    { text: "偶尔有", score: { 阴虚质: 2 } },
+                    { text: "有时有", score: { 阴虚质: 3 } },
+                    { text: "经常有", score: { 阴虚质: 4 } },
+                    { text: "总是有", score: { 阴虚质: 5 } }
+                ]
+            },
+            {
+                text: "您感到胸闷或腹部胀满吗？",
+                options: [
+                    { text: "几乎没有", score: { 痰湿质: 1 } },
+                    { text: "偶尔有", score: { 痰湿质: 2 } },
+                    { text: "有时有", score: { 痰湿质: 3 } },
+                    { text: "经常有", score: { 痰湿质: 4 } },
+                    { text: "总是有", score: { 痰湿质: 5 } }
+                ]
+            },
+            {
+                text: "您面部或鼻部有油腻感或者油亮发光吗？",
+                options: [
+                    { text: "几乎没有", score: { 湿热质: 1 } },
+                    { text: "偶尔有", score: { 湿热质: 2 } },
+                    { text: "有时有", score: { 湿热质: 3 } },
+                    { text: "经常有", score: { 湿热质: 4 } },
+                    { text: "总是有", score: { 湿热质: 5 } }
+                ]
+            },
+            {
+                text: "您皮肤在不知不觉中会出现青紫瘀斑吗？",
+                options: [
+                    { text: "几乎没有", score: { 血瘀质: 1 } },
+                    { text: "偶尔有", score: { 血瘀质: 2 } },
+                    { text: "有时有", score: { 血瘀质: 3 } },
+                    { text: "经常有", score: { 血瘀质: 4 } },
+                    { text: "总是有", score: { 血瘀质: 5 } }
+                ]
+            },
+            {
+                text: "您容易精神紧张、焦虑不安吗？",
+                options: [
+                    { text: "几乎没有", score: { 气郁质: 1 } },
+                    { text: "偶尔有", score: { 气郁质: 2 } },
+                    { text: "有时有", score: { 气郁质: 3 } },
+                    { text: "经常有", score: { 气郁质: 4 } },
+                    { text: "总是有", score: { 气郁质: 5 } }
+                ]
+            },
+            {
+                text: "您容易过敏(对药物、食物、花粉等)吗？",
+                options: [
+                    { text: "几乎没有", score: { 特禀质: 1 } },
+                    { text: "偶尔有", score: { 特禀质: 2 } },
+                    { text: "有时有", score: { 特禀质: 3 } },
+                    { text: "经常有", score: { 特禀质: 4 } },
+                    { text: "总是有", score: { 特禀质: 5 } }
+                ]
+            },
+            {
+                text: "您容易感冒吗？",
+                options: [
+                    { text: "一年<2次", score: { 平和质: 5, 气虚质: 1 } },
+                    { text: "一年3-4次", score: { 平和质: 4, 气虚质: 2 } },
+                    { text: "一年5-6次", score: { 平和质: 3, 气虚质: 3 } },
+                    { text: "一年8次以上", score: { 平和质: 2, 气虚质: 4 } },
+                    { text: "几乎每月都感冒", score: { 平和质: 1, 气虚质: 5 } }
+                ]
+            },
+            {
+                text: "您精力充沛吗？",
+                options: [
+                    { text: "总是精力充沛", score: { 平和质: 5, 气虚质: 1 } },
+                    { text: "大部分时间精力充沛", score: { 平和质: 4, 气虚质: 2 } },
+                    { text: "精力一般", score: { 平和质: 3, 气虚质: 3 } },
+                    { text: "精力不足", score: { 平和质: 2, 气虚质: 4 } },
+                    { text: "总是感到疲惫", score: { 平和质: 1, 气虚质: 5 } }
+                ]
+            }
+        ];
+
+        // 体质类型描述和建议
+        const constitutions = {
+            "平和质": {
+                desc: "平和质是健康的体质类型。这类人通常体形匀称健壮，面色红润，精力充沛，睡眠良好，二便正常。性格开朗，适应能力强，不易生病。",
+                tips: [
+                    "保持规律作息，避免过度劳累",
+                    "饮食均衡，多吃五谷杂粮、蔬菜水果",
+                    "适度运动，如散步、太极拳、游泳等",
+                    "保持心情愉悦，避免情绪波动过大",
+                    "定期体检，关注身体变化"
+                ],
+                icon: "fa-smile"
+            },
+            "气虚质": {
+                desc: "气虚质的人常感疲乏无力，气短懒言，易出汗，易感冒。肌肉松软不实，声音低弱，活动量稍大就容易出虚汗。",
+                tips: [
+                    "避免过度劳累，保证充足睡眠",
+                    "多吃益气健脾食物，如山药、大枣、小米",
+                    "适度运动，如太极拳、八段锦等",
+                    "避免剧烈运动和大汗淋漓",
+                    "注意保暖，避免受风受凉"
+                ],
+                icon: "fa-wind"
+            },
+            "阳虚质": {
+                desc: "阳虚质的人畏寒怕冷，手足不温，喜热饮食，精神不振。肌肉松软不实，性格多沉静内向，易患寒证。",
+                tips: [
+                    "注意保暖，尤其是腰腹部和下肢",
+                    "多吃温阳食物，如羊肉、生姜、核桃",
+                    "避免生冷食物和冷饮",
+                    "适度运动，多在阳光下活动",
+                    "冬季可适当进补温阳药材"
+                ],
+                icon: "fa-snowflake"
+            },
+            "阴虚质": {
+                desc: "阴虚质的人手足心热，口燥咽干，喜冷饮，大便干燥。体形偏瘦，容易失眠，性情急躁，外向好动。",
+                tips: [
+                    "避免熬夜，保证充足睡眠",
+                    "多吃滋阴食物，如梨、银耳、百合",
+                    "少吃辛辣燥热食物，如辣椒、油炸食品",
+                    "适度运动，避免剧烈运动",
+                    "保持情绪稳定，避免急躁"
+                ],
+                icon: "fa-sun"
+            },
+            "痰湿质": {
+                desc: "痰湿质的人形体肥胖，腹部肥满松软，面部皮肤油脂多，多汗且黏。胸闷痰多，口黏腻或甜，喜食肥甘甜黏。",
+                tips: [
+                    "饮食清淡，少吃甜腻、油腻食物",
+                    "多吃健脾利湿食物，如薏米、冬瓜、赤小豆",
+                    "坚持运动，促进新陈代谢",
+                    "避免潮湿环境，多晒太阳",
+                    "保持心情舒畅，避免忧思过度"
+                ],
+                icon: "fa-cloud"
+            },
+            "湿热质": {
+                desc: "湿热质的人面部油光，易生痤疮，口苦口干，身重困倦。大便黏滞不畅或燥结，小便短黄。男性易阴囊潮湿，女性易带下增多。",
+                tips: [
+                    "饮食清淡，多吃清热利湿食物，如绿豆、苦瓜",
+                    "少吃辛辣油腻食物，戒烟限酒",
+                    "保持居住环境干燥通风",
+                    "适度运动，促进排汗排湿",
+                    "避免熬夜，保证充足睡眠"
+                ],
+                icon: "fa-fire"
+            },
+            "血瘀质": {
+                desc: "血瘀质的人肤色晦暗，色素沉着，容易出现瘀斑，口唇黯淡。易患疼痛，女性多见痛经、闭经等。",
+                tips: [
+                    "多吃活血食物，如山楂、黑木耳、红糖",
+                    "适度运动，促进血液循环",
+                    "保持心情舒畅，避免情绪抑郁",
+                    "注意保暖，避免寒冷刺激",
+                    "可适当按摩促进气血运行"
+                ],
+                icon: "fa-tint"
+            },
+            "气郁质": {
+                desc: "气郁质的人神情抑郁，情感脆弱，烦闷不乐。形体多瘦，睡眠较差，健忘，痰多，大便多干。",
+                tips: [
+                    "多参加社交活动，保持心情愉悦",
+                    "多吃行气解郁食物，如柑橘、玫瑰花",
+                    "培养兴趣爱好，转移注意力",
+                    "适度运动，如瑜伽、散步",
+                    "保证充足睡眠，避免熬夜"
+                ],
+                icon: "fa-cloud-sun"
+            },
+            "特禀质": {
+                desc: "特禀质的人易过敏，常见哮喘、风团、咽痒、鼻塞、喷嚏等。适应能力差，易引发宿疾。",
+                tips: [
+                    "避免接触过敏原，如花粉、尘螨",
+                    "饮食清淡均衡，避免发物",
+                    "保持居住环境清洁，勤换洗床上用品",
+                    "适度运动，增强体质",
+                    "季节变换时注意防护"
+                ],
+                icon: "fa-allergies"
+            }
+        };
+
+        // 初始化变量
+        let currentQuestion = 0;
+        let userAnswers = [];
+        const scores = {
+            平和质: 0, 气虚质: 0, 阳虚质: 0, 阴虚质: 0,
+            痰湿质: 0, 湿热质: 0, 血瘀质: 0, 气郁质: 0, 特禀质: 0
+        };
+
+        // DOM元素
+        const introSection = document.getElementById('intro');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const constitutionType = document.getElementById('constitutionType');
+        const constitutionDesc = document.getElementById('constitutionDesc');
+        const constitutionTips = document.getElementById('constitutionTips');
+        const constitutionName = document.querySelector('.constitution-name i');
+
+        // 开始测试
+        startBtn.addEventListener('click', () => {
+            introSection.style.display = 'none';
+            quizContainer.style.display = 'block';
+            showQuestion(currentQuestion);
+        });
+
+        // 重新测试
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            userAnswers = [];
+            resetScores();
+            resultContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            showQuestion(currentQuestion);
+        });
+
+        // 显示问题
+        function showQuestion(index) {
+            // 更新进度条
+            const progress = ((index + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // 设置问题文本
+            questionText.textContent = `${index + 1}. ${questions[index].text}`;
+            
+            // 清空选项容器
+            optionsContainer.innerHTML = '';
+            
+            // 添加选项
+            questions[index].options.forEach((option, optionIndex) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[index] === optionIndex) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.innerHTML = `<span>${optionIndex + 1}</span>${option.text}`;
+                optionElement.addEventListener('click', () => selectOption(index, optionIndex));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // 更新导航按钮状态
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === questions.length - 1 ? '查看结果' : '下一题';
+            nextBtn.className = index === questions.length - 1 ? 'btn-nav btn-submit' : 'btn-nav btn-next';
+        }
+
+        // 选择选项
+        function selectOption(questionIndex, optionIndex) {
+            // 移除之前的选择
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // 添加新选择
+            options[optionIndex].classList.add('selected');
+            
+            // 保存答案
+            userAnswers[questionIndex] = optionIndex;
+        }
+
+        // 上一题
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        });
+
+        // 下一题/提交
+        nextBtn.addEventListener('click', () => {
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('请选择一个答案');
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                calculateResult();
+                showResult();
+            }
+        });
+
+        // 计算分数
+        function calculateResult() {
+            // 重置分数
+            resetScores();
+            
+            // 计算每题的分数
+            userAnswers.forEach((answer, questionIndex) => {
+                const option = questions[questionIndex].options[answer];
+                for (const constitution in option.score) {
+                    scores[constitution] += option.score[constitution];
+                }
+            });
+        }
+
+        // 重置分数
+        function resetScores() {
+            for (const constitution in scores) {
+                scores[constitution] = 0;
+            }
+        }
+
+        // 显示结果
+        function showResult() {
+            quizContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            // 找到最高分的体质
+            let maxScore = 0;
+            let userConstitution = "平和质";
+            
+            for (const constitution in scores) {
+                if (scores[constitution] > maxScore) {
+                    maxScore = scores[constitution];
+                    userConstitution = constitution;
+                }
+            }
+            
+            // 显示结果
+            constitutionType.textContent = userConstitution;
+            constitutionDesc.textContent = constitutions[userConstitution].desc;
+            constitutionName.className = `fas ${constitutions[userConstitution].icon}`;
+            
+            // 显示建议
+            constitutionTips.innerHTML = '';
+            constitutions[userConstitution].tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                constitutionTips.appendChild(li);
+            });
+        }
+
+        // 初始化
+        showQuestion(currentQuestion);
+    </script>
+</body>
+</html>
